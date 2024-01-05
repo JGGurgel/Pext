@@ -29,7 +29,6 @@ class Application extends Container
         self::$bootstraped = true;
         self::$baseDir = $baseDir;
         self::$instance =  new Application;
-        self::$instance->bind(Database::class, new Database(database: 'teste'));
     }
 
     private static function execute(Input $request)
