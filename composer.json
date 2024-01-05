@@ -1,0 +1,17 @@
+{
+    "name": "jggurgel/pext",
+    "description": "a php framework",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Jggurgel\\Pext\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "João Gabriel Campos Gurgel",
+            "email": "joaogabriel@rubeus.com.br"
+        }
+    ],
+    "require": {}
+}
