@@ -53,13 +53,17 @@ class Database
     public function runMigrations()
     {
         $migrationsDir =  base_dir('/database/migrations');
-        $migrationTableFile = "0-create-table-migration.sql";
 
-        $this->run(file_get_contents($migrationsDir . DIRECTORY_SEPARATOR .  $migrationTableFile));
+        $this->run(
+            "CREATE TABLE IF NOT EXISTS migration (
+                id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                name VARCHAR(255) NOT NULL
+            )"
+        );
         $files = scandir($migrationsDir);
 
         foreach ($files as $file) {
-            if ($file == $migrationTableFile || $file == '.' || $file == '..') {
+            if ($file == '.' || $file == '..') {
                 continue;
             }
             if ($this->first('select id from migration where name = ?', [$file])) {
@@ -72,7 +76,7 @@ class Database
 
     public function dropTables()
     {
-        $tables = $this->query('SHOW TABLES',mode:PDO::FETCH_COLUMN);
+        $tables = $this->query('SHOW TABLES', mode: PDO::FETCH_COLUMN);
         foreach ($tables as $table) {
             $this->run("DROP TABLE IF EXISTS " . $table);
         }

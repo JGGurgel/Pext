@@ -53,12 +53,8 @@ function join_paths(...$paths)
 
 function middleware(...$args)
 {
-    $map = [
-        'auth' => Authenticate::class
-    ];
-
     foreach ($args as $middleware) {
-        app()->make($map[$middleware])->execute(Input::current());
+        app()->make($middleware)->execute(Input::current());
     }
 }
 

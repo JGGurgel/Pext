@@ -16,10 +16,7 @@ class Auth
     public static function throwIfNotAuthenticated()
     {
         if (self::$user == null) {
-           self::throw();
+           throw new AuthException();
         }
-    }
-    public static function throw(){
-        throw new ReportableException("Usuário não autenticado");
     }
 }

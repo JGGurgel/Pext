@@ -3,7 +3,6 @@
 namespace Jggurgel\Pext;
 
 use Jggurgel\Pext\Lib\Container;
-use Jggurgel\Pext\Lib\Database;
 use Jggurgel\Pext\Lib\Input;
 use Jggurgel\Pext\Lib\Output;
 use Jggurgel\Pext\Lib\Pipeline;

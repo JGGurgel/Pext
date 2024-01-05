@@ -41,7 +41,7 @@ class Output
 
         try {
             if (!file_exists($view)) {
-                throw new ReportableException('Not found');
+                throw new NotFoundException();
             }
             extract($data);
             ob_start();

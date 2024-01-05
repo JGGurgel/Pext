@@ -75,7 +75,5 @@ class Input
         if($erros){
             ValidationException::throw($erros, $this->data());
         }
-
-        return $erros;
     }
 }
