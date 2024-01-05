@@ -71,6 +71,9 @@ class Output
     {
         $output  = new self();
         try {
+            if (!file_exists($controller)) {
+                throw new NotFoundException();
+            }
             $data = require $controller;
             $output->data = $data;
             $output->compiledView =  json_encode($data);
