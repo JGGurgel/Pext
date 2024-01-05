@@ -2,6 +2,7 @@
     "name": "jggurgel/pext",
     "description": "a php framework",
     "type": "library",
+    "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
             "Jggurgel\\Pext\\": "src/"
