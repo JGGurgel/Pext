@@ -8,7 +8,7 @@ class Output
 {
     private static $current = null;
 
-    private string $compiledView = '';
+    public string $compiledView = '';
     public bool $success = true;
     public string $message =  '';
     public array|object $data = [];
@@ -34,38 +34,6 @@ class Output
         $output->message = $message;
         $output->data = $data;
         return $output;
-    }
-    public static function view(string $view, $data = [], $layout = '')
-    {
-        $output  = new self();
-
-        try {
-            if (!file_exists($view)) {
-                throw new NotFoundException();
-            }
-            extract($data);
-            ob_start();
-            require $view;
-            $compiledView = ob_get_clean();
-            if ($layout) {
-                ob_start();
-                require $layout;
-                $layout = ob_get_clean();
-                $compiledView = str_replace('{{body}}', $compiledView, $layout);
-            }
-            $output->success = true;
-            $output->compiledView = $compiledView;
-            return $output;
-        } catch (ValidationException $th) {
-            Session::flashOld($th->getOld());
-            Session::flashError($th->getErrors());
-            return redirectBack();
-        } catch (AuthException $authEx) {
-            Session::flashError('auth', 'Usuário não autenticado');
-            return $output->redirect('/login');
-        } catch (Throwable $ex) {
-            return Output::view(web_dir('error-page.php'), ['message' => $ex->getMessage()], web_dir('layout.php'));
-        }
     }
     public static function json($controller)
     {

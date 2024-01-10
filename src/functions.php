@@ -35,16 +35,15 @@ function base_dir(...$paths)
     return join_paths(Application::$baseDir, ...$paths);
 }
 
-function web_dir(...$paths)
+function pages_dir(...$paths)
 {
-    return join_paths(Application::$baseDir,  'web', ...$paths);
+    return join_paths(Application::$baseDir,  'pages', ...$paths);
 }
 
 function api_dir(...$paths)
 {
-    return join_paths(Application::$baseDir, 'web', 'api', ...$paths);
+    return join_paths( pages_dir(), 'api', ...$paths);
 }
-
 
 function join_paths(...$paths)
 {

@@ -3,41 +3,40 @@
 
 namespace Jggurgel\Pext\Lib;
 
-
 class Pipeline
 {
+
     public function execute(Input $input): Output
     {
-        $routeParts = explode('/', $input->route());
-        $parameter = null;
-        $file = 'index.php';
-        $isApi = str_starts_with($input->route(), '/api');
-        $dir = '';
-        $layout = web_dir('layout.php');
+        $router = new Router(
+            $input->route(),
+            pages_dir()
+        );
 
-        foreach ($routeParts as $part) {
-            if ($part === '') continue;
-
-            if (is_dir(web_dir($dir, $part))) {
-                $dir = join_paths($dir, $part);
-                continue;
-            }
-
-            $dir = join_paths($dir, '[id]');
-            $parameter = $part;
-            $input->id = $parameter;
+        if (!file_exists($router->view())) {
+            throw new NotFoundException();
         }
 
-        if (is_file(web_dir($dir, 'layout.php'))) {
-            $layout = web_dir($dir, 'layout.php');
+        $input->id = $router->parameter();
+
+        foreach ($router->middlewares() as $middleware) {
+            require $middleware;
         }
 
-        return $isApi ?
-            Output::json(web_dir($dir, $file)) :
-            Output::view(
-                view: web_dir($dir, $file),
-                data: compact('input'),
-                layout: $layout
-            );
+        $output  = new Output();
+        if ($isApi) {
+            $output->compiledView =  json_encode(require $router->view());
+            return $output;
+        }
+
+        ob_start();
+        require $router->view();
+        $renderedView = ob_get_clean();
+        ob_start();
+        require $router->layout();
+        $renderedLayout = ob_get_clean();
+        $compiledView = str_replace('{{body}}', $renderedView, $renderedLayout);
+        $output->compiledView = $compiledView;
+        return $output;
     }
 }
